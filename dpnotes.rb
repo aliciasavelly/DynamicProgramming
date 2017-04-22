@@ -16,5 +16,43 @@ class DP
   end
 end
 
-dp = DP.new()
-p dp.good_fib(1000)
+# memoization
+# dp = DP.new()
+# p dp.bad_fib(10)
+# p dp.bad_fib(25)
+# p dp.good_fib(1000)
+
+# vacuous case
+# def make_change(amt, coins)
+#   # base case:
+#     # return infinity if amt < 0
+#     # return 0 if amt = 0
+#   # recursive case:
+#     # loop through coins
+#     # temp -> make change called on (amt - coin, coins)
+#     # keep track of min_so_far
+#     # if temp < min_so_far
+#       # swap
+#     # return min_so_far + 1
+# end
+
+def make_change(amt, coins)
+  return 1.0 / 0.0 if amt < 0
+  return 0 if amt == 0
+  min_so_far = 1.0 / 0.0
+  coins.each do |coin|
+    temp = make_change(amt - coin, coins) + 1
+    if temp < min_so_far
+      min_so_far = temp
+    end
+  end
+
+  min_so_far
+end
+
+p make_change(25, [1, 5, 10, 25])
+p make_change(26, [1, 5, 10, 25])
+p make_change(27, [1, 5, 10, 25])
+p make_change(28, [1, 5, 10, 25])
+p make_change(29, [1, 5, 10, 25])
+p make_change(30, [1, 5, 10, 25])
