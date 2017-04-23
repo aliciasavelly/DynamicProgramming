@@ -3,6 +3,8 @@
 # You may find it helpful to delegate the dynamic programming work itself to a helper method so that you can
 # then clean out the caches you use.  You can also change the inputs to include a cache that you pass from call to call.
 
+require 'byebug'
+
 class DPProblems
   def initialize
     # Use this to create any instance variables you may need
@@ -27,20 +29,29 @@ class DPProblems
   # nil.  You may assume that the coin array is sorted
   # and in ascending order.
   def make_change(amt, coins, coin_cache = {0 => 0})
-    return 0 if amt <= 0
-    return 0.0 / 0.0 if amt < coins[0]
     return coin_cache[amt] if coin_cache[amt]
+    return 0.0 / 0.0 if amt < coins[0]
 
-    min_so_far = 1.0 / 0.0
-    coins.each do |coin|
-      temp = make_change(amt - coin, coins) + 1
-      if temp < min_so_far
-        min_so_far = temp
+    min_so_far = amt
+    valid = false
+    idx = 0
+    while idx < coins.length && coins[idx] <= amt
+      num_change = 1 + make_change(amt - coins[idx], coins, coin_cache)
+      if num_change.is_a?(Integer)
+        valid = true
+        min_so_far = num_change if num_change < min_so_far
       end
+
+      idx += 1
     end
 
-    coin_cache[amt] = min_so_far
-    min_so_far
+    if valid
+      coin_cache[amt] = min_so_far
+    else
+      coin_cache[amt] = 0.0 / 0.0
+    end
+
+    coin_cache[amt]
   end
 
   # Knapsack Problem: write a function that takes in an array of weights, an array of values, and a weight capacity
