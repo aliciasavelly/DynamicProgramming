@@ -6,18 +6,41 @@
 class DPProblems
   def initialize
     # Use this to create any instance variables you may need
+    @fibonacci_cache = { 1 => 1, 2 => 1 }
   end
 
-  # Takes in a positive integer n and returns the nth Fibonacci number
+  # Takes in a positive integer n and returns the nth Fibonacci
+  # number
   # Should run in O(n) time
   def fibonacci(n)
+    return @fibonacci_cache[n] if @fibonacci_cache[n]
+    result = fibonacci(n - 1) + fibonacci(n - 2)
+    @fibonacci_cache[n] = result
+    result
   end
 
-  # Make Change: write a function that takes in an amount and a set of coins.  Return the minimum number of coins
-  # needed to make change for the given amount.  You may assume you have an unlimited supply of each type of coin.
-  # If it's not possible to make change for a given amount, return nil.  You may assume that the coin array is sorted
+  # Make Change: write a function that takes in an amount and a
+  # set of coins.  Return the minimum number of coins
+  # needed to make change for the given amount.  You may assume
+  # you have an unlimited supply of each type of coin.
+  # If it's not possible to make change for a given amount, return
+  # nil.  You may assume that the coin array is sorted
   # and in ascending order.
   def make_change(amt, coins, coin_cache = {0 => 0})
+    return 0 if amt <= 0
+    return 0.0 / 0.0 if amt < coins[0]
+    return coin_cache[amt] if coin_cache[amt]
+
+    min_so_far = 1.0 / 0.0
+    coins.each do |coin|
+      temp = make_change(amt - coin, coins) + 1
+      if temp < min_so_far
+        min_so_far = temp
+      end
+    end
+
+    coin_cache[amt] = min_so_far
+    min_so_far
   end
 
   # Knapsack Problem: write a function that takes in an array of weights, an array of values, and a weight capacity

@@ -80,7 +80,7 @@ end
 # base case:
   # helper[0, w] = 0
   # helper[i, 0] = 0
-  # helper[i, w] = infinity if w < 0 or i < 0
+  # helper[i, w] = negative infinity if w < 0 or i < 0
 
 # recursive case:
   # indexing from 1
