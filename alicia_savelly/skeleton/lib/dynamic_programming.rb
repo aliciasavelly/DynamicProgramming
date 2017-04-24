@@ -9,6 +9,7 @@ class DPProblems
   def initialize
     # Use this to create any instance variables you may need
     @fibonacci_cache = { 1 => 1, 2 => 1 }
+    @str_distance_cache = Hash.new { |hash, key| hash[key] = {} }
   end
 
   # Takes in a positive integer n and returns the nth Fibonacci
@@ -122,10 +123,45 @@ class DPProblems
     possible_ways.last
   end
 
-  # String Distance: given two strings, str1 and str2, calculate the minimum number of operations to change str1 into
-  # str2.  Allowed operations are deleting a character ("abc" -> "ac", e.g.), inserting a character ("abc" -> "abac", e.g.),
-  # and changing a single character into another ("abc" -> "abz", e.g.).
+  # String Distance: given two strings, str1 and str2,
+  # calculate the minimum number of operations to change str1 into
+  # str2.  Allowed operations are deleting a character
+  # ("abc" -> "ac", e.g.), inserting a character ("abc" -> "abac", e.g.),
+  # and changing a single character into another
+  # ("abc" -> "abz", e.g.).
   def str_distance(str1, str2)
+    str_distance_helper(str1, str2)
+    # @str_distance_cache = Hash.new { |hash, key| hash[key] = {} }
+  end
+
+  def str_distance_helper(str1, str2)
+    return @str_distance_cache[str1][str2] if @str_distance_cache[str1][str2]
+
+    if str1 == str2
+      @str_distance_cache[str1][str2] = 0
+      return 0
+    end
+
+    if str1.nil?
+      return str2.length
+    elsif str2.nil?
+      return str1.length
+    end
+
+    len1 = str1.length
+    len2 = str2.length
+    if str1[0] == str2[0]
+      distance = str_distance_helper(str1[1..len1], str2[1..len2])
+      @str_distance_cache[str1][str2] = distance
+      return distance
+    else
+      possible1 = 1 + str_distance_helper(str1[1..len1], str2[1..len2])
+      possible2 = 1 + str_distance_helper(str1, str2[1..len2])
+      possible3 = 1 + str_distance_helper(str1[1..len1], str2)
+      distance = [possible1, possible2, possible3].min
+      @str_distance_cache[str1][str2] = distance
+      return distance
+    end
   end
 
   # Maze Traversal: write a function that takes in a maze (represented as a 2D matrix) and a starting
