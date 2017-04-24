@@ -149,7 +149,6 @@ class DPProblems
     if str1[0] == str2[0]
       distance = str_distance(str1[1..len1], str2[1..len2])
       @str_distance_cache[str1][str2] = distance
-      # return distance
     else
       possible1 = 1 + str_distance(str1[1..len1], str2[1..len2])
       possible2 = 1 + str_distance(str1, str2[1..len2])
