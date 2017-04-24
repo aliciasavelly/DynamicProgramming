@@ -54,19 +54,52 @@ class DPProblems
     coin_cache[amt]
   end
 
-  # Knapsack Problem: write a function that takes in an array of weights, an array of values, and a weight capacity
-  # and returns the maximum value possible given the weight constraint.  For example: if weights = [1, 2, 3],
-  # values = [10, 4, 8], and capacity = 3, your function should return 10 + 4 = 14, as the best possible set of items
-  # to include are items 0 and 1, whose values are 10 and 4 respectively.  Duplicates are not allowed -- that is, you
+  # Knapsack Problem: write a function that takes in an array of
+  # weights, an array of values, and a weight capacity
+  # and returns the maximum value possible given the weight
+  # constraint.  For example: if weights = [1, 2, 3],
+  # values = [10, 4, 8], and capacity = 3, your function should
+  # return 10 + 4 = 14, as the best possible set of items
+  # to include are items 0 and 1, whose values are 10 and 4
+  # respectively.  Duplicates are not allowed -- that is, you
   # can only include a particular item once.
   def knapsack(weights, values, capacity)
+    return 0 if capacity == 0 || weights.length == 0
+    solutions = knapsack_table(weights, values, capacity)
+    solutions[capacity][weights.length - 1]
   end
 
-  # Stair Climber: a frog climbs a set of stairs.  It can jump 1 step, 2 steps, or 3 steps at a time.
-  # Write a function that returns all the possible ways the frog can get from the bottom step to step n.
-  # For example, with 3 steps, your function should return [[1, 1, 1], [1, 2], [2, 1], [3]].
-  # NB: this is similar to, but not the same as, make_change.  Try implementing this using the opposite
-  # DP technique that you used in make_change -- bottom up if you used top down and vice versa.
+  def knapsack_table(weights, values, capacity)
+    solutions = []
+    (0..capacity).each do |c|
+      solutions[c] = []
+      (0..weights.length - 1).each do |w|
+        if c == 0
+          solutions[c][w] = 0
+        elsif w == 0
+          solutions[c][w] = (weights[0] > c ? 0 : values[0])
+        else
+          option1 = solutions[c][w - 1]
+          option2 = c < weights[w] ? 0 : solutions[c - weights[w]][w - 1] + values[w]
+          best = [option1, option2].max
+          solutions[c][w] = best
+        end
+      end
+    end
+
+    solutions
+  end
+
+  # Stair Climber: a frog climbs a set of stairs.  It can jump
+  # 1 step, 2 steps, or 3 steps at a time.
+  # Write a function that returns all the possible ways the frog
+  # can get from the bottom step to step n.
+  # For example, with 3 steps, your function should return
+  # [[1, 1, 1], [1, 2], [2, 1], [3]].
+  # NB: this is similar to, but not the same as, make_change.
+  # Try implementing this using the opposite
+  # DP technique that you used in make_change -- bottom up if
+  # you used top down and vice versa.
   def stair_climb(n)
   end
 
