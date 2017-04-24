@@ -129,12 +129,8 @@ class DPProblems
   # ("abc" -> "ac", e.g.), inserting a character ("abc" -> "abac", e.g.),
   # and changing a single character into another
   # ("abc" -> "abz", e.g.).
-  def str_distance(str1, str2)
-    str_distance_helper(str1, str2)
-    # @str_distance_cache = Hash.new { |hash, key| hash[key] = {} }
-  end
 
-  def str_distance_helper(str1, str2)
+  def str_distance(str1, str2)
     return @str_distance_cache[str1][str2] if @str_distance_cache[str1][str2]
 
     if str1 == str2
@@ -151,17 +147,18 @@ class DPProblems
     len1 = str1.length
     len2 = str2.length
     if str1[0] == str2[0]
-      distance = str_distance_helper(str1[1..len1], str2[1..len2])
+      distance = str_distance(str1[1..len1], str2[1..len2])
       @str_distance_cache[str1][str2] = distance
-      return distance
+      # return distance
     else
-      possible1 = 1 + str_distance_helper(str1[1..len1], str2[1..len2])
-      possible2 = 1 + str_distance_helper(str1, str2[1..len2])
-      possible3 = 1 + str_distance_helper(str1[1..len1], str2)
+      possible1 = 1 + str_distance(str1[1..len1], str2[1..len2])
+      possible2 = 1 + str_distance(str1, str2[1..len2])
+      possible3 = 1 + str_distance(str1[1..len1], str2)
       distance = [possible1, possible2, possible3].min
       @str_distance_cache[str1][str2] = distance
-      return distance
     end
+
+    distance
   end
 
   # Maze Traversal: write a function that takes in a maze (represented as a 2D matrix) and a starting
