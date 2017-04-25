@@ -186,7 +186,35 @@ class DPProblems
       return 1
     end
 
+    x = start[1]
+    y = start[0]
+    adjacents = [[y, x + 1], [y, x - 1], [y + 1, x], [y - 1, x]]
+    possible_moves = []
+    adjacents.each do |spot|
+      if maze[spot[0]][spot[1]] != 'x'
+        possible_moves << spot
+      end
+    end
 
+    route = false
+    best = maze.length * maze[0].length
+
+    temp = make_temp_maze(maze, start)
+    possible_moves.each do |move|
+
+    end
   end
 
+  def make_temp_maze(maze, start)
+    temp = Array.new(maze.length)
+    maze.each_with_index do |row, idx|
+      row.each do |el|
+        temp[idx] << el
+      end
+    end
+
+    temp[start[0]][start[1]] = 'x'
+
+    temp
+  end
 end

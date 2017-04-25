@@ -1,3 +1,5 @@
+require 'byebug'
+
 class DPProblems
   attr_accessor :fibonacci_cache, :dist_cache, :maze_cache
 
