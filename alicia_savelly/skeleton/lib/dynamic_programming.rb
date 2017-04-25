@@ -10,6 +10,7 @@ class DPProblems
     # Use this to create any instance variables you may need
     @fibonacci_cache = { 1 => 1, 2 => 1 }
     @str_distance_cache = Hash.new { |hash, key| hash[key] = {} }
+    @maze_cache = Hash.new { |hash, key| hash[key] = {} }
   end
 
   # Takes in a positive integer n and returns the nth Fibonacci
@@ -160,13 +161,32 @@ class DPProblems
     distance
   end
 
-  # Maze Traversal: write a function that takes in a maze (represented as a 2D matrix) and a starting
-  # position (represented as a 2-dimensional array) and returns the minimum number of steps needed to reach the edge of the maze (including the start).
-  # Empty spots in the maze are represented with ' ', walls with 'x'. For example, if the maze input is:
+  # Maze Traversal: write a function that takes in a maze
+  # (represented as a 2D matrix) and a starting
+  # position (represented as a 2-dimensional array) and
+  # returns the minimum number of steps needed to reach the
+  # edge of the maze (including the start).
+  # Empty spots in the maze are represented with ' ', walls
+  # with 'x'. For example, if the maze input is:
   #            [['x', 'x', 'x', 'x'],
   #             ['x', ' ', ' ', 'x'],
   #             ['x', 'x', ' ', 'x']]
-  # and the start is [1, 1], then the shortest escape route is [[1, 1], [1, 2], [2, 2]] and thus your function should return 3.
+  # and the start is [1, 1], then the shortest escape route
+  # is [[1, 1], [1, 2], [2, 2]] and thus your function should
+  # return 3.
   def maze_escape(maze, start)
+    result = maze_escape_helper(maze, start)
+    @maze_cache = Hash.new { |hash, key| hash[key] = {} }
+    result
   end
+
+  def maze_escape_helper(maze, start)
+    if (start[0] == 0 || start[1] == 0) || (start[0] == maze.length - 1 || start[1] == maze[0].length - 1)
+      @maze_cache[start[0]][start[1]] = 1
+      return 1
+    end
+
+
+  end
+
 end
