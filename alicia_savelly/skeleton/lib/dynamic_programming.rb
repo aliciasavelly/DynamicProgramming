@@ -177,10 +177,13 @@ class DPProblems
   def maze_escape(maze, start)
     result = maze_escape_helper(maze, start)
     @maze_cache = Hash.new { |hash, key| hash[key] = {} }
+
     result
   end
 
   def maze_escape_helper(maze, start)
+    return @maze_cache[start[0]][start[1]] if @maze_cache[start[0]][start[1]]
+
     if (start[0] == 0 || start[1] == 0) || (start[0] == maze.length - 1 || start[1] == maze[0].length - 1)
       @maze_cache[start[0]][start[1]] = 1
       return 1
@@ -190,6 +193,7 @@ class DPProblems
     y = start[0]
     adjacents = [[y, x + 1], [y, x - 1], [y + 1, x], [y - 1, x]]
     possible_moves = []
+
     adjacents.each do |spot|
       if maze[spot[0]][spot[1]] != 'x'
         possible_moves << spot
@@ -198,15 +202,29 @@ class DPProblems
 
     route = false
     best = maze.length * maze[0].length
-
     temp = make_temp_maze(maze, start)
-    possible_moves.each do |move|
 
+    possible_moves.each do |move|
+      pos = maze_escape_helper(temp, move)
+
+      if pos.is_a?(Fixnum) && pos < best
+        route = true
+        best = pos
+      end
+    end
+
+    if route
+      @maze_cache[start[0]][start[1]] = best + 1
+
+      return best + 1
+    else
+      return 0.0 / 0.0
     end
   end
 
   def make_temp_maze(maze, start)
-    temp = Array.new(maze.length)
+    temp = Array.new(maze.length) { Array.new }
+
     maze.each_with_index do |row, idx|
       row.each do |el|
         temp[idx] << el
