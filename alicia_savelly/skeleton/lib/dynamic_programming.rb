@@ -18,8 +18,10 @@ class DPProblems
   # Should run in O(n) time
   def fibonacci(n)
     return @fibonacci_cache[n] if @fibonacci_cache[n]
+    
     result = fibonacci(n - 1) + fibonacci(n - 2)
     @fibonacci_cache[n] = result
+
     result
   end
 
@@ -68,6 +70,7 @@ class DPProblems
   def knapsack(weights, values, capacity)
     return 0 if capacity == 0 || weights.length == 0
     solutions = knapsack_table(weights, values, capacity)
+
     solutions[capacity][weights.length - 1]
   end
 
@@ -147,6 +150,7 @@ class DPProblems
 
     len1 = str1.length
     len2 = str2.length
+
     if str1[0] == str2[0]
       distance = str_distance(str1[1..len1], str2[1..len2])
       @str_distance_cache[str1][str2] = distance
